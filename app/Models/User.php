@@ -19,6 +19,7 @@ class User extends Authenticatable implements FilamentUser
         } else if($panel->getId() === 'user' && $panel->getId() === $this->role) {
             return true;
         }
+        return false;
     }
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
