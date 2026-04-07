@@ -170,7 +170,7 @@
                     else if (priority === 'Medium') color = '#f59e0b';
                     
                     info.el.style.borderLeft = `4px solid ${color}`;
-                    info.el.style.backgroundColor = color + '20';
+                    info.el.style.backgroundColor = color + '40';
                     info.el.style.borderRadius = '4px';
                     info.el.style.color = '#111827';
                     info.el.style.fontWeight = '500';
