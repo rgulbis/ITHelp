@@ -113,18 +113,10 @@
         background: white !important;
     }
 
-    .fc-daygrid {
-        display: flex !important;
+    .fc-scrollgrid,
+    .fc-scrollgrid table {
         width: 100% !important;
-        height: auto !important;
-    }
-
-    .fc-daygrid-day {
-        flex: 0 0 14.2857142857% !important;
-        min-width: 14.2857142857% !important;
-        max-width: 14.2857142857% !important;
-        margin: 0 !important;
-        padding: 0 !important;
+        table-layout: fixed !important;
     }
 
     .fc-daygrid-day-frame {
@@ -136,14 +128,7 @@
     #calendar {
         max-width: 100%;
         overflow-x: visible !important;
-        padding-right: 20px !important;
-    }
-
-    .fc-daygrid-week-number,
-    .fc-col-header-cell {
-        flex: 0 0 14.2857142857% !important;
-        min-width: 14.2857142857% !important;
-        max-width: 14.2857142857% !important;
+        padding-right: 0 !important;
     }
 }
 </style>
