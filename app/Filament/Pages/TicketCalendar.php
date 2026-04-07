@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Ticket;
+use Filament\Actions\Action;
 use Filament\Pages\Page;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -24,6 +25,16 @@ class TicketCalendar extends Page
             ->groupBy(fn (Ticket $ticket) => $ticket->created_at->format('Y-m'))
             ->map(fn (Collection $tickets) => $tickets->count())
             ->sortKeysDesc();
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('back')
+                ->label('Back')
+                ->icon('heroicon-o-arrow-left')
+                ->url(url()->previous()),
+        ];
     }
 
     public function getEvents(): array

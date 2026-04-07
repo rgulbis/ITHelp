@@ -13,6 +13,12 @@ class ListTickets extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('back')
+                ->label('Back')
+                ->icon('heroicon-o-arrow-left')
+                ->url(fn (): string => url()->previous() !== request()->fullUrl()
+                    ? url()->previous()
+                    : route('filament.user.pages.dashboard')),
             Actions\CreateAction::make(),
         ];
     }

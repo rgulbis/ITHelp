@@ -13,6 +13,12 @@ class EditTicket extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('back')
+                ->label('Back')
+                ->icon('heroicon-o-arrow-left')
+                ->url(fn (): string => url()->previous() !== request()->fullUrl()
+                    ? url()->previous()
+                    : static::getResource()::getUrl('index')),
             Actions\ViewAction::make(),
             Actions\DeleteAction::make(),
         ];

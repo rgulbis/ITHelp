@@ -55,6 +55,12 @@ class ViewTicket extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('back')
+                ->label('Back')
+                ->icon('heroicon-o-arrow-left')
+                ->url(fn (): string => url()->previous() !== request()->fullUrl()
+                    ? url()->previous()
+                    : static::getResource()::getUrl('index')),
             Actions\Action::make('add_comment')
                 ->label('Add Comment')
                 ->icon('heroicon-o-chat-bubble-left')

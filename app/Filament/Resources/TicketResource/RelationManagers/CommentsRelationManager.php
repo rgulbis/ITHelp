@@ -8,14 +8,13 @@ use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CommentsRelationManager extends RelationManager
 {
@@ -30,13 +29,6 @@ class CommentsRelationManager extends RelationManager
                     ->maxLength(65535)
                     ->columnSpanFull(),
             ]);
-    }
-
-    protected function mutateFormDataBeforeCreate(array $data): array
-    {
-        $data['user_id'] = auth()->id();
-
-        return $data;
     }
 
     public function table(Table $table): Table
@@ -55,7 +47,12 @@ class CommentsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                CreateAction::make(),
+                CreateAction::make()
+                    ->mutateDataUsing(function (array $data): array {
+                        $data['user_id'] = Filament::auth()->id();
+
+                        return $data;
+                    }),
             ])
             ->actions([
                 EditAction::make(),
