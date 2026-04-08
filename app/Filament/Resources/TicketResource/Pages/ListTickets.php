@@ -18,7 +18,7 @@ class ListTickets extends ListRecords
                 ->icon('heroicon-o-arrow-left')
                 ->url(fn (): string => url()->previous() !== request()->fullUrl()
                     ? url()->previous()
-                    : route('filament.admin.pages.dashboard')),
+                    : static::getResource()::getUrl('index')),
             Actions\CreateAction::make(),
         ];
     }

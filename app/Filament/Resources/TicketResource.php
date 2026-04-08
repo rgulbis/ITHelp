@@ -57,9 +57,8 @@ class TicketResource extends Resource
                             ->multiple()
                             ->image()
                             ->directory('tickets')
-                            ->visibility('public')
-                            ->downloadable()
-                            ->disabled(),
+                            ->disk('public')
+                            ->downloadable(),
                     ])->columns(2),
                 Schemas\Components\Section::make('Assignment')
                     ->schema([
@@ -70,7 +69,7 @@ class TicketResource extends Resource
                                 'Closed' => 'Closed',
                             ])
                             ->required(),
-                        Forms\Components\Select::make('assigned_user_id')
+                        Forms\Components\Select::make('assigned_to')
                             ->label('Assigned To')
                             ->options(\App\Models\User::where('role', 'admin')->pluck('name', 'id'))
                             ->searchable(),
