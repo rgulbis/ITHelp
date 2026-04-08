@@ -2,22 +2,29 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Ticket;
+use App\Filament\Widgets\AdminAllTicketStats;
 use App\Filament\Widgets\AdminTicketStats;
 use App\Filament\Widgets\UserTicketStats;
+use Filament\Facades\Filament;
 use Filament\Pages\Dashboard as BaseDashboard;
-use Illuminate\Support\Facades\Auth;
 
 class Dashboard extends BaseDashboard
 {
     public function getWidgets(): array
     {
-        $user = Auth::user();
+        $user = Filament::auth()->user() ?? auth()->user();
+
+        if (! $user) {
+            return [
+                UserTicketStats::class,
+            ];
+        }
 
         // Admin sees their assigned tickets
-        if ($user->role === 'admin') {
+        if (strtolower((string) $user->role) === 'admin') {
             return [
                 AdminTicketStats::class,
+                AdminAllTicketStats::class,
             ];
         }
 

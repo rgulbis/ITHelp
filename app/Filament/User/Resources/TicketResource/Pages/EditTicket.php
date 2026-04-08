@@ -10,6 +10,25 @@ class EditTicket extends EditRecord
 {
     protected static string $resource = TicketResource::class;
 
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['full_name'] = trim(($data['first_name'] ?? '') . ' ' . ($data['last_name'] ?? ''));
+
+        return $data;
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $fullName = trim((string) ($data['full_name'] ?? ''));
+        [$firstName, $lastName] = array_pad(preg_split('/\s+/', $fullName, 2) ?: [], 2, '');
+
+        $data['first_name'] = $firstName;
+        $data['last_name'] = $lastName;
+        unset($data['full_name']);
+
+        return $data;
+    }
+
     protected function getHeaderActions(): array
     {
         return [

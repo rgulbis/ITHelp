@@ -7,9 +7,9 @@ use Filament\Facades\Filament;
 use Filament\Widgets\StatsOverviewWidget as StatsOverviewBaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
-class AdminTicketStats extends StatsOverviewBaseWidget
+class AdminAllTicketStats extends StatsOverviewBaseWidget
 {
-    protected ?string $heading = 'My Assigned Tickets';
+    protected ?string $heading = 'All Tickets Overall';
 
     protected int | array | null $columns = 4;
 
@@ -19,66 +19,60 @@ class AdminTicketStats extends StatsOverviewBaseWidget
 
         if (! $user) {
             return [
-                Stat::make('My Total Assigned', 0)
-                    ->description('Assigned to you')
+                Stat::make('All Tickets Total', 0)
+                    ->description('All tickets in the system')
                     ->color('primary')
-                    ->icon('heroicon-o-clipboard-document'),
+                    ->icon('heroicon-o-users'),
 
-                Stat::make('My Open', 0)
+                Stat::make('All Tickets Open', 0)
                     ->description('Waiting to be started')
                     ->color('warning')
                     ->icon('heroicon-o-exclamation-circle'),
 
-                Stat::make('My In Progress', 0)
-                    ->description('Currently working on')
+                Stat::make('All Tickets In Progress', 0)
+                    ->description('Currently being worked on')
                     ->color('info')
                     ->icon('heroicon-o-arrow-path'),
 
-                Stat::make('My Closed', 0)
-                    ->description('Completed by you')
+                Stat::make('All Tickets Closed', 0)
+                    ->description('Completed tickets')
                     ->color('success')
                     ->icon('heroicon-o-check-circle'),
-
             ];
         }
 
-        $myInProgress = Ticket::query()
-            ->where('assigned_to', $user->id)
+        $allAdminsInProgress = Ticket::query()
             ->where('status', 'In Progress')
             ->count();
 
-        $myOpen = Ticket::query()
-            ->where('assigned_to', $user->id)
+        $allAdminsOpen = Ticket::query()
             ->where('status', 'Open')
             ->count();
 
-        $myClosed = Ticket::query()
-            ->where('assigned_to', $user->id)
+        $allAdminsClosed = Ticket::query()
             ->where('status', 'Closed')
             ->count();
 
-        $myTotal = Ticket::query()
-            ->where('assigned_to', $user->id)
-            ->count();
+        $allAdminsTotal = Ticket::query()->count();
 
         return [
-            Stat::make('My Total Assigned', $myTotal)
-                ->description('Assigned to you')
+            Stat::make('All Tickets Total', $allAdminsTotal)
+                ->description('All tickets in the system')
                 ->color('primary')
-                ->icon('heroicon-o-clipboard-document'),
+                ->icon('heroicon-o-users'),
 
-            Stat::make('My Open', $myOpen)
+            Stat::make('All Tickets Open', $allAdminsOpen)
                 ->description('Waiting to be started')
                 ->color('warning')
                 ->icon('heroicon-o-exclamation-circle'),
 
-            Stat::make('My In Progress', $myInProgress)
-                ->description('Currently working on')
+            Stat::make('All Tickets In Progress', $allAdminsInProgress)
+                ->description('Currently being worked on')
                 ->color('info')
                 ->icon('heroicon-o-arrow-path'),
 
-            Stat::make('My Closed', $myClosed)
-                ->description('Completed by you')
+            Stat::make('All Tickets Closed', $allAdminsClosed)
+                ->description('Completed tickets')
                 ->color('success')
                 ->icon('heroicon-o-check-circle'),
         ];
