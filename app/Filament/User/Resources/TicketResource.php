@@ -65,9 +65,19 @@ class TicketResource extends Resource
                             ->required(),
                         Forms\Components\FileUpload::make('images')
                             ->multiple()
-                            ->image()
+                            ->acceptedFileTypes([
+                                'image/jpeg',
+                                'image/png',
+                                'image/webp',
+                                'image/gif',
+                                'image/heic',
+                                'image/heif',
+                            ])
+                            ->maxSize(20480)
                             ->directory('tickets')
+                            ->disk('public')
                             ->visibility('public')
+                            ->openable()
                             ->downloadable(),
                     ])->columns(2),
             ]);

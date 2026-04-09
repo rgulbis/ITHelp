@@ -4,53 +4,73 @@ namespace App\Filament\Resources\TicketResource\Pages;
 
 use App\Filament\Resources\TicketResource;
 use App\Models\Comment;
+use Filament\Infolists\Components as InfolistComponents;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Pages\ViewRecord;
-use Filament\Infolists;
-use Filament\Infolists\Infolist;
+use Filament\Schemas\Components;
+use Filament\Schemas\Schema;
+use Illuminate\Support\HtmlString;
+use Illuminate\Support\Facades\Storage;
 
 class ViewTicket extends ViewRecord
 {
     protected static string $resource = TicketResource::class;
 
-    // public function infolist(Infolist $infolist): Infolist
-    // {
-    //     return $infolist
-    //         ->schema([
-    //             Infolists\Components\Section::make('Ticket Details')
-    //                 ->schema([
-    //                     Infolists\Components\TextEntry::make('first_name'),
-    //                     Infolists\Components\TextEntry::make('last_name'),
-    //                     Infolists\Components\TextEntry::make('class_department')->label('Class/Department'),
-    //                     Infolists\Components\TextEntry::make('category'),
-    //                     Infolists\Components\TextEntry::make('priority'),
-    //                     Infolists\Components\TextEntry::make('title'),
-    //                     Infolists\Components\TextEntry::make('description'),
-    //                     Infolists\Components\TextEntry::make('status'),
-    //                     Infolists\Components\TextEntry::make('assignedUser.name')->label('Assigned To'),
-    //                     Infolists\Components\TextEntry::make('created_at')->dateTime(),
-    //                     Infolists\Components\TextEntry::make('updated_at')->dateTime(),
-    //                 ])->columns(2),
-    //             Infolists\Components\Section::make('Images')
-    //                 ->schema([
-    //                     Infolists\Components\ImageEntry::make('images')
-    //                         ->disk('public')
-    //                         ->height(200),
-    //                 ])
-    //                 ->visible(fn ($record) => !empty($record->images)),
-    //             Infolists\Components\Section::make('Comments')
-    //                 ->schema([
-    //                     Infolists\Components\RepeatableEntry::make('comments')
-    //                         ->schema([
-    //                             Infolists\Components\TextEntry::make('user.name')->label('User'),
-    //                             Infolists\Components\TextEntry::make('message'),
-    //                             Infolists\Components\TextEntry::make('created_at')->dateTime(),
-    //                         ])
-    //                         ->columns(1),
-    //                 ]),
-    //         ]);
-    // }
+    public function infolist(Schema $schema): Schema
+    {
+        return $schema
+            ->schema([
+                Components\Section::make('Ticket Details')
+                    ->schema([
+                        InfolistComponents\TextEntry::make('first_name'),
+                        InfolistComponents\TextEntry::make('last_name'),
+                        InfolistComponents\TextEntry::make('class_department')->label('Class/Department'),
+                        InfolistComponents\TextEntry::make('category'),
+                        InfolistComponents\TextEntry::make('priority'),
+                        InfolistComponents\TextEntry::make('title'),
+                        InfolistComponents\TextEntry::make('description'),
+                        InfolistComponents\TextEntry::make('status'),
+                        InfolistComponents\TextEntry::make('assignedUser.name')->label('Assigned To'),
+                        Components\Text::make(function (): HtmlString {
+                            $images = $this->record->images;
+
+                            if (is_string($images)) {
+                                $decoded = json_decode($images, true);
+                                $images = is_array($decoded) ? $decoded : [];
+                            }
+
+                            if (empty($images) || ! is_array($images)) {
+                                return new HtmlString('<strong>Image Downloads:</strong> No images uploaded');
+                            }
+
+                            $links = collect($images)
+                                ->filter()
+                                ->values()
+                                ->map(function (string $path, int $index): string {
+                                    $url = e('/storage/' . ltrim($path, '/'));
+
+                                    return '<a href="'.$url.'" download target="_blank" rel="noopener">Download image '.($index + 1).'</a>';
+                                })
+                                ->implode('<br>');
+
+                            return new HtmlString('<strong>Image Downloads:</strong><br>'.$links);
+                        })->columnSpanFull(),
+                        InfolistComponents\TextEntry::make('created_at')->dateTime(),
+                        InfolistComponents\TextEntry::make('updated_at')->dateTime(),
+                    ])->columns(2),
+                Components\Section::make('Comments')
+                    ->schema([
+                        InfolistComponents\RepeatableEntry::make('comments')
+                            ->schema([
+                                InfolistComponents\TextEntry::make('user.name')->label('User'),
+                                InfolistComponents\TextEntry::make('message'),
+                                InfolistComponents\TextEntry::make('created_at')->dateTime(),
+                            ])
+                            ->columns(1),
+                    ]),
+            ]);
+    }
 
     protected function getHeaderActions(): array
     {
