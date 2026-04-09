@@ -43,6 +43,8 @@ class CommentsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(),
             ])
+            ->defaultSort('created_at', 'asc')
+            ->paginated(false)
             ->filters([
                 //
             ])

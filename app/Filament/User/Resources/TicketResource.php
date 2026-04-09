@@ -29,11 +29,16 @@ class TicketResource extends Resource
             ->schema([
                 Schemas\Components\Section::make('Ticket Details')
                     ->schema([
-                        Forms\Components\TextInput::make('full_name')
-                            ->label('Name / Surname')
+                        Forms\Components\TextInput::make('first_name')
+                            ->label('First Name')
                             ->required()
                             ->maxLength(255)
-                            ->default(auth()->user()->name), // Pre-fill with user name
+                            ->default(explode(' ', auth()->user()->name)[0] ?? ''),
+                        Forms\Components\TextInput::make('last_name')
+                            ->label('Last Name')
+                            ->required()
+                            ->maxLength(255)
+                            ->default(explode(' ', auth()->user()->name)[count(explode(' ', auth()->user()->name)) - 1] ?? ''),
                         Forms\Components\TextInput::make('class_department')
                             ->label('Class/Department')
                             ->required()

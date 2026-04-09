@@ -19,7 +19,6 @@ class ListTickets extends ListRecords
                 ->url(fn (): string => url()->previous() !== request()->fullUrl()
                     ? url()->previous()
                     : static::getResource()::getUrl('index')),
-            Actions\CreateAction::make(),
         ];
     }
 }

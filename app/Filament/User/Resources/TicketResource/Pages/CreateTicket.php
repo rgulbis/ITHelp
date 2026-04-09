@@ -24,13 +24,6 @@ class CreateTicket extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $fullName = trim((string) ($data['full_name'] ?? ''));
-        [$firstName, $lastName] = array_pad(preg_split('/\s+/', $fullName, 2) ?: [], 2, '');
-
-        $data['first_name'] = $firstName;
-        $data['last_name'] = $lastName;
-        unset($data['full_name']);
-
         $data['user_id'] = auth()->id();
         $data['status'] = 'Open'; // Default status
 

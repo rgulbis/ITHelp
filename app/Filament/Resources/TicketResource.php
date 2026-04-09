@@ -129,6 +129,7 @@ class TicketResource extends Resource
                         'Urgent' => 'Urgent',
                     ]),
             ])
+            ->headerActions([])
             ->actions([
                 Actions\ViewAction::make(),
                 Actions\EditAction::make(),
@@ -152,7 +153,6 @@ class TicketResource extends Resource
     {
         return [
             'index' => Pages\ListTickets::route('/'),
-            'create' => Pages\CreateTicket::route('/create'),
             'view' => Pages\ViewTicket::route('/{record}'),
             'edit' => Pages\EditTicket::route('/{record}/edit'),
         ];
